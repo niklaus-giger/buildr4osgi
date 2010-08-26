@@ -28,7 +28,7 @@ module OSGi
       sourcesManifest = ::Buildr::Packaging::Java::Manifest.new(nil)
       sourcesManifest.main["Bundle-ManifestVersion"] = "2"
       sourcesManifest.main["Eclipse-SourceBundle"] = "#{bundleSymName};version=\"#{bundleVersion}\";roots:=\".\""
-      sourcesManifest.main["Bundle-SymbolicName"] = bundleSymName + ".sources"
+      sourcesManifest.main["Bundle-SymbolicName"] = bundleSymName + ".source"
       sourcesManifest.main["Bundle-Name"] += " sources" if sourcesManifest.main["Bundle-Name"] 
       sourcesManifest.main["Bundle-Version"] = bundleVersion
       sourcesManifest.main["Bundle-Vendor"] = pluginManifest["Bundle-Vendor"] unless pluginManifest["Bundle-Vendor"].nil?

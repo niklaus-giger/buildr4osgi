@@ -51,7 +51,7 @@ module Buildr4OSGi
 
             launcherPlugin = Dir.glob("#{File.dirname(eclipseSDK.to_s)}/eclipse/plugins/org.eclipse.equinox.launcher_*")[0]
 
-            cmdline <<-CMD
+            cmdline = <<-CMD
             java -jar #{launcherPlugin} -application org.eclipse.equinox.p2.publisher.UpdateSitePublisher
             -metadataRepository file:#{targetP2Repo} 
             -artifactRepository file:#{targetP2Repo}
@@ -63,7 +63,7 @@ module Buildr4OSGi
             -clean -consoleLog
             CMD
             info "Invoking P2's metadata generation: #{cmdline}"
-            system cmdline
+            system cmdline.gsub(/\n/, "").gsub(/\s+/, " ")
 
             include targetP2Repo, :as => "."
           end

@@ -37,14 +37,17 @@ module Buildr4OSGi
         super
         
         enhance do |p2_task|
-          fail "The p2 task needs to be associated with a site " unless site
-          p2_task.enhance [site]
+          if @site.nil?
+            @site = project.package(:site)
+          end
+          fail "The p2 task needs to be associated with a site " if @site.nil?
+          p2_task.enhance [@site]
           #add a prerequisite to the list of prerequisites, gives a chance
           #for other prerequisites to be placed before this block is executed.
           p2_task.enhance do 
             targetP2Repo = File.join(project.base_dir, "target", "p2repository")
             mkpath targetP2Repo
-            Buildr::unzip(targetP2Repo=>project.package(:site).to_s).extract
+            Buildr::unzip(targetP2Repo=>@site.to_s).extract
             eclipseSDK = Buildr::artifact("org.eclipse:eclipse-SDK:zip:3.6M3-win32")
             eclipseSDK.invoke
             Buildr::unzip(File.dirname(eclipseSDK.to_s) => eclipseSDK.to_s).extract

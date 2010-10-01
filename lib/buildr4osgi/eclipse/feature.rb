@@ -341,7 +341,7 @@ PROPERTIES
           artifact = Buildr::artifact(artifact.to_hash.merge(:classifier => "sources")) if artifact.is_a?(Buildr::Artifact)
           info, as_dir = adapt_plugin(artifact)
           if !info.nil? 
-            info[:unjarred] = as_dir || (!@unjarred[plugin].nil? && @unjarred[plugin][:unjarred])
+            info[:unjarred] = false #as_dir || (!@unjarred[plugin].nil? && @unjarred[plugin][:unjarred]) never explode a sources bundle.
             resolved_plugins[info] = artifact
           end
         end
@@ -394,7 +394,7 @@ PROPERTIES
         raise "Cannot use same feature.xml file for both binary and source features packaging" if (!featurePackage.feature_xml.nil?) && featurePackage.feature_xml == sdkTask.feature_xml
         sdkTask.label += " - Sources" if featurePackage.label == sdkTask.label
         sdkTask.description = "Sources for " + sdkTask.description if featurePackage.description == sdkTask.description
-        sdkTask.feature_id += ".sources" if featurePackage.feature_id == sdkTask.feature_id
+        sdkTask.feature_id += ".source" if featurePackage.feature_id == sdkTask.feature_id
         sdkTask.generateFeature(project)
       end
       

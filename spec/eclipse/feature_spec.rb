@@ -116,6 +116,7 @@ end
 describe Buildr4OSGi::FeatureTask, "configuration" do
   
   it "should accept the feature parameters" do
+    Buildr::write "p2.inf", ""
     foo = define("foo", :version => "1.0.0")
     f = foo.package(:feature)
     lambda {
@@ -131,6 +132,7 @@ describe Buildr4OSGi::FeatureTask, "configuration" do
     f.update_sites << {:url => "http://example.com/update", :name => "My update site"}
     f.discovery_sites = [{:url => "http://example.com/update2", :name => "My update site2"}, 
       {:url => "http://example.com/upup", :name => "My update site in case"}]
+    f.p2_inf = "p2.inf"
     }.should_not raise_error
   end
   
@@ -205,6 +207,7 @@ end
 describe Buildr4OSGi::FeatureTask, " when running" do
   
   before do
+    Buildr::write "myp2.inf", "#p2 properties\n"
     @foo = define("foo", :version => "1.0.0")
     f = @foo.package(:feature)
     f.plugins << DEBUG_UI
@@ -218,6 +221,7 @@ describe Buildr4OSGi::FeatureTask, " when running" do
     f.update_sites << {:url => "http://example.com/update", :name => "My update site"}
     f.discovery_sites = [{:url => "http://example.com/update2", :name => "My update site2"}, 
       {:url => "http://example.com/upup", :name => "My update site in case"}]
+    f.p2_inf = "myp2.inf"
   end
   
   it "should create a jar file with a eclipse/plugins and a eclipse/features structure" do
@@ -227,6 +231,7 @@ describe Buildr4OSGi::FeatureTask, " when running" do
     Zip::ZipFile.open(feature_file) do |zip|
       zip.find_entry("eclipse/features/foo_1.0.0/feature.xml").should_not be_nil
       zip.find_entry("eclipse/features/foo_1.0.0/feature.properties").should_not be_nil
+      zip.find_entry("eclipse/features/foo_1.0.0/p2.inf").should_not be_nil
       zip.find_entry("eclipse/plugins/org.eclipse.debug.ui_3.4.1.v20080811_r341.jar").should_not be_nil
     end
   end

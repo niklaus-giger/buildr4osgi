@@ -121,6 +121,7 @@ PROPERTIES
     
     attr_accessor :feature_xml
     attr_accessor :feature_properties
+    attr_accessor :p2_inf
     
     FeatureWriter::VARS << :plugins
     FeatureWriter::VARS << :feature_xml
@@ -138,6 +139,7 @@ PROPERTIES
       mkpath File.join(project.base_dir, 'target')
       resolved_plugins = create_resolved_plugins
       enhance(resolved_plugins.values)
+      enhance([p2_inf]) if p2_inf
       unless feature_xml
         File.open(File.join(project.base_dir, 'target', 'feature.xml'), 'w') do |f|
           f.write(writeFeatureXml(resolved_plugins.keys, feature_xml.nil? && feature_properties.nil? ))
@@ -154,6 +156,7 @@ PROPERTIES
       else
         path("eclipse/features/#{feature_id}_#{project.version}").include feature_properties if feature_properties
       end
+      path("eclipse/features/#{feature_id}_#{project.version}").include(p2_inf.to_s, :as => "p2.inf") if p2_inf
       
       resolved_plugins.each_pair do |info, plugin| 
         unless info[:manifest].nil?

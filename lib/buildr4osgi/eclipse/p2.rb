@@ -62,7 +62,7 @@ module Buildr4OSGi
             -artifactRepositoryName #{project.name}_#{project.version} 
             -source #{targetP2Repo} 
             -configs gtk.linux.x86 
-            -publishArtifacts 
+            -publishArtifacts -compress
             -clean -consoleLog
             CMD
             info "Invoking P2's metadata generation: #{cmdline}"

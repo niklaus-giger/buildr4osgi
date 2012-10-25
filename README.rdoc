@@ -32,6 +32,11 @@ See http://oss.intalio.com/buildr4osgi
 
 http://intalio.github.com/buildr4osgi is the cutting edge documentation if you work against the trunk.
 
+== Build issues
+
+* buildr4osgi uses a git submodule to track buildr (version 0.9.5 and older used braid)
+* use "rake -T" see what build targets are available
+
 == License
 
 Licensed to the Apache Software Foundation (ASF) under one or more

@@ -32,11 +32,20 @@ See http://oss.intalio.com/buildr4osgi
 
 http://intalio.github.com/buildr4osgi is the cutting edge documentation if you work against the trunk.
 
-== Build issues
+== Hints for developing/improving buildr4osgi
 
 * buildr4osgi uses a git submodule to track buildr (version 0.9.5 and older used braid)
-* use "rake -T" see what build targets are available
+* use "gem install bundler" to be able to use the bundle command
+* use "bundle install" to get all bundles needed to build and run rspec tests
+* "gem build buildr4osgi.gemspec" builds our gem
+* "gem build buildr4osgi-<version/variant>.gem  --local" installs the gem generate with the command given above
+* "rspec spec" runs all specs.
+* "rspec spec/osgi/packaging_spec.rb" runs only the specified spec file(s)
+* "rake rerdoc" to regenerate the documentation. Output placed into the rdoc subdirectory
 
+=== Troubleshooting
+
+If you rake
 == License
 
 Licensed to the Apache Software Foundation (ASF) under one or more

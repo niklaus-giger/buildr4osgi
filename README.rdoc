@@ -45,7 +45,10 @@ http://intalio.github.com/buildr4osgi is the cutting edge documentation if you w
 
 === Troubleshooting
 
-If you rake
+If you get errors when running rake or rspec about not matching version of gems,
+they usually can be fixed by assuring that the versions in build4osgi.gemspec match
+the versions given in buildr/buildr.gemspec.
+
 == License
 
 Licensed to the Apache Software Foundation (ASF) under one or more

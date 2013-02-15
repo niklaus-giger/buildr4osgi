@@ -45,17 +45,21 @@ module Buildr4OSGi
           #add a prerequisite to the list of prerequisites, gives a chance
           #for other prerequisites to be placed before this block is executed.
           p2_task.enhance do 
-            targetP2Repo = File.join(project.base_dir, "target", "p2repository")
+            targetP2Repo = File.join(project.path_to(:target), "p2repository")
             mkpath targetP2Repo
             Buildr::unzip(targetP2Repo=>@site.to_s).extract
-            eclipseSDK = Buildr::artifact("org.eclipse:eclipse-SDK:zip:3.6M3-win32")
-            eclipseSDK.invoke
-            Buildr::unzip(File.dirname(eclipseSDK.to_s) => eclipseSDK.to_s).extract
-
-            launcherPlugin = Dir.glob("#{File.dirname(eclipseSDK.to_s)}/eclipse/plugins/org.eclipse.equinox.launcher_*")[0]
-
+            launcherPlugin = Dir.glob("#{ENV['P2_EXE']}/plugins/org.eclipse.equinox.launcher_*")
+            launcherPlugin = Dir.glob("#{ENV['OSGi']}/plugins/org.eclipse.equinox.launcher_*") if launcherPlugin.size == 0
+            if launcherPlugin.size == 0
+              eclipseSDK = Buildr::artifact("org.eclipse:eclipse-SDK:zip:3.6M3-win32")
+              eclipseSDK.invoke
+              Buildr::unzip(File.dirname(eclipseSDK.to_s) => eclipseSDK.to_s).extract
+              launcherPlugin = Dir.glob("#{File.dirname(eclipseSDK.to_s)}/eclipse/plugins/org.eclipse.equinox.launcher_*")
+            end
+            raise "org.eclipse.equinox.launcher_* must be present in environment variable P2_EXE or OSGi" if  launcherPlugin.size == 0
             cmdline = <<-CMD
-            java -jar #{launcherPlugin} -application org.eclipse.equinox.p2.publisher.UpdateSitePublisher
+            java -jar #{launcherPlugin[0]} 
+            -application org.eclipse.equinox.p2.publisher.UpdateSitePublisher
             -metadataRepository file:#{targetP2Repo} 
             -artifactRepository file:#{targetP2Repo}
             -metadataRepositoryName #{project.name}_#{project.version}
